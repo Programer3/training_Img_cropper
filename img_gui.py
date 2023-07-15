@@ -1,5 +1,5 @@
 import os
-from PIL import Image
+import PIL.Image
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
@@ -21,25 +21,25 @@ class ImageCropper:
 
     def create_widgets(self):
         # First screen - Select input and output folders
-        frame1 = Frame(self.root)
-        frame1.pack(pady=20)
+        self.frame1 = Frame(self.root)
+        self.frame1.pack(pady=20)
 
-        label1 = Label(frame1, text="Input Folder:")
+        label1 = Label(self.frame1, text="Input Folder:")
         label1.grid(row=0, column=0, padx=10, pady=10)
 
-        input_entry = Entry(frame1, textvariable=self.input_folder, width=30)
+        input_entry = Entry(self.frame1, textvariable=self.input_folder, width=30)
         input_entry.grid(row=0, column=1, padx=10)
 
-        input_browse_btn = Button(frame1, text="Browse", command=self.browse_input_folder)
+        input_browse_btn = Button(self.frame1, text="Browse", command=self.browse_input_folder)
         input_browse_btn.grid(row=0, column=2, padx=10)
 
-        label2 = Label(frame1, text="Output Folder:")
+        label2 = Label(self.frame1, text="Output Folder:")
         label2.grid(row=1, column=0, padx=10, pady=10)
 
-        output_entry = Entry(frame1, textvariable=self.output_folder, width=30)
+        output_entry = Entry(self.frame1, textvariable=self.output_folder, width=30)
         output_entry.grid(row=1, column=1, padx=10)
 
-        output_browse_btn = Button(frame1, text="Browse", command=self.browse_output_folder)
+        output_browse_btn = Button(self.frame1, text="Browse", command=self.browse_output_folder)
         output_browse_btn.grid(row=1, column=2, padx=10)
 
         next_btn = Button(self.root, text="Next", command=self.goto_next_screen)
@@ -71,6 +71,7 @@ class ImageCropper:
         process_btn.grid(row=3, column=1, pady=10)
 
         self.root.bind('<Return>', self.crop_images)
+
 
     def browse_input_folder(self):
         folder_path = filedialog.askdirectory()
@@ -120,7 +121,7 @@ class ImageCropper:
 
                 for i, image_name in enumerate(image_list, start=1):
                     image_path = os.path.join(input_folder, image_name)
-                    image = Image.open(image_path)
+                    image = PIL.Image.open(image_path)
 
                     # Crop and save the image
                     top_left = image.crop((0, 0, width, height))
