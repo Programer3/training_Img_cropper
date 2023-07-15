@@ -115,7 +115,13 @@ class ImageCropper:
 
         if output_name:
             try:
-                os.makedirs(output_folder + "/cropped", exist_ok=True)
+                # Check if the output folder exists
+                if not os.path.exists(output_folder):
+                    os.makedirs(output_folder)
+
+                # Create the 'cropped' subfolder inside the output folder
+                cropped_folder = os.path.join(output_folder, "cropped")
+                os.makedirs(cropped_folder, exist_ok=True)
 
                 image_list = os.listdir(input_folder)
 
@@ -129,10 +135,10 @@ class ImageCropper:
                     bottom_left = image.crop((0, image.height - height, width, image.height))
                     bottom_right = image.crop((image.width - width, image.height - height, image.width, image.height))
 
-                    top_left.save(f"{output_folder}/cropped/{output_name} ({i * 4 - 3}).jpg")
-                    top_right.save(f"{output_folder}/cropped/{output_name} ({i * 4 - 2}).jpg")
-                    bottom_left.save(f"{output_folder}/cropped/{output_name} ({i * 4 - 1}).jpg")
-                    bottom_right.save(f"{output_folder}/cropped/{output_name} ({i * 4}).jpg")
+                    top_left.save(os.path.join(cropped_folder, f"{output_name} ({i * 4 - 3}).jpg"))
+                    top_right.save(os.path.join(cropped_folder, f"{output_name} ({i * 4 - 2}).jpg"))
+                    bottom_left.save(os.path.join(cropped_folder, f"{output_name} ({i * 4 - 1}).jpg"))
+                    bottom_right.save(os.path.join(cropped_folder, f"{output_name} ({i * 4}).jpg"))
 
                 images_done = len(image_list) * 4
                 messagebox.showinfo("Process Complete", f"{images_done} images cropped and saved successfully.")
@@ -144,6 +150,7 @@ class ImageCropper:
                 messagebox.showerror("Error", f"An error occurred: {str(e)}")
         else:
             messagebox.showwarning("Warning", "Please enter an output name.")
+
 
 root = Tk()
 app = ImageCropper(root)
